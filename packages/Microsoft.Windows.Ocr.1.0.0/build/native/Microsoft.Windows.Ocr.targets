@@ -1,0 +1,35 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup Condition="('$(Platform)'=='Win32') OR ('$(Platform)'=='x86')" Label="x86 mapping">
+		<MappedPlatform>x86</MappedPlatform>
+	</PropertyGroup>
+	<PropertyGroup Condition="('$(Platform)'=='x64') OR ('$(Platform)'=='amd64')" Label="x64 mapping">
+		<MappedPlatform>x64</MappedPlatform>
+	</PropertyGroup>
+	<PropertyGroup Condition="('$(Platform)'=='ARM')" Label="ARM mapping">
+		<MappedPlatform>ARM</MappedPlatform>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(PlatformToolset)'=='v110_wp80'" Label="Windows Phone 8.0 mapping">
+		<ToolsetFolder>wp8</ToolsetFolder>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(PlatformToolset)'=='v120_wp81'" Label="Windows Phone 8.0 mapping">
+		<ToolsetFolder>wpa81</ToolsetFolder>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(PlatformToolset)'=='v120'" Label="Windows 8.1 mapping">
+		<ToolsetFolder>win81</ToolsetFolder>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="WindowsPreview.Media.Ocr">
+			<HintPath>$(MSBuildThisFileDirectory)\..\..\lib\$(ToolsetFolder)\$(MappedPlatform)\WindowsPreview.Media.Ocr.winmd</HintPath>
+			<IsWinMDFile>true</IsWinMDFile>
+		</Reference>
+	</ItemGroup>
+	<Target Name="CheckAnyCPU" Condition="('$(MappedPlatform)' != 'x64') AND ('$(MappedPlatform)' != 'x86') AND ('$(MappedPlatform)' != 'ARM')" BeforeTargets="InjectReferences">
+		<Error Text="WindowsPreview.Media.Ocr does not support the $(Platform) target platform." />
+	</Target>
+	<Target Name="Checkx64" Condition="'$(MappedPlatform)|$(PlatformToolset)'=='x64|v110_wp80'" BeforeTargets="InjectReferences">
+		<Error Text="WindowsPreview.Media.Ocr does not support the $(Platform) target platform on Windows Phone 8. " />
+	</Target>
+		<Target Name="Checkx64" Condition="'$(MappedPlatform)|$(PlatformToolset)'=='x64|v120_wp81'" BeforeTargets="InjectReferences">
+		<Error Text="WindowsPreview.Media.Ocr does not support the $(Platform) target platform on Windows Phone 8.1. " />
+	</Target>
+</Project>
